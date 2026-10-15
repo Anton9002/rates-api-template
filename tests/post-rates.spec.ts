@@ -45,7 +45,7 @@ test.describe('POST /api/rates', () => {
 
     const response = await request.post("/api/rates/", {
 
-      data: {"currency": "CHF", "rate": 1000000}
+      data: {"currency": "CHF", "rate": 1000001}
 
     })
 
