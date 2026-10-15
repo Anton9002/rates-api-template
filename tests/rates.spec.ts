@@ -1,4 +1,6 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
+import { StatusCodes } from 'http-status-codes';
+import { Currency } from './currency';
 
 test.describe('GET /api/currencies', () => {
   test('returns list of currencies sorted by code', async () => {});
@@ -7,12 +9,12 @@ test.describe('GET /api/currencies', () => {
 
 test.describe('GET /api/rates/{currency}', () => {
   test('returns rate for existing currency', async ({ request }) => {
-    const response = await request.get('/api/rates/USD');
+    const response = await request.get(`/api/rates/${Currency.USD}`);
 
-    expect(response.status()).toBe(200);
+    expect(response.status()).toBe(StatusCodes.OK);
 
     const body = await response.json();
-    expect(body.currency).toBe('USD');
+    expect(body.currency).toBe(Currency.USD);
     expect(typeof body.rate).toBe('number');
     expect(body.rate).toBeGreaterThan(0);
   });
