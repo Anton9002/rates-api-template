@@ -4,3 +4,5 @@ export enum Currency {
   JPY = 'JPY',
   CHF = 'CHF',
 }
+
+export const SEED_CURRENCIES: string[] = [Currency.USD, Currency.GBP, Currency.JPY];

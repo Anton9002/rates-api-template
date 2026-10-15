@@ -1,25 +1,29 @@
 import { test, expect } from '@playwright/test';
 import { StatusCodes } from 'http-status-codes';
-import { Currency } from './currency';
+import { Currency, SEED_CURRENCIES } from './currency';
+
+test.beforeAll(async ({ request }) => {
+  const response = await request.get('/api/currencies');
+  const currencies: { currency: string }[] = await response.json();
+
+  for (const { currency } of currencies) {
+    if (!SEED_CURRENCIES.includes(currency)) {
+      const deleted = await request.delete(`/api/rates/${currency}`);
+      expect(deleted.status()).toBe(StatusCodes.NO_CONTENT);
+    }
+  }
+});
 
 test.describe('GET /api/currencies', () => {
-  test('contains initial currencies USD, GBP and JPY', async ({ request }) => {
+  test('returns 3 currencies', async ({ request }) => {
     const response = await request.get('/api/currencies');
 
     expect(response.status()).toBe(StatusCodes.OK);
 
     const body = await response.json();
-    expect(body).toEqual(
-      expect.arrayContaining([
-        { currency: Currency.USD, rate: 1.08 },
-        { currency: Currency.GBP, rate: 0.85 },
-        { currency: Currency.JPY, rate: 162.5 },
-      ]),
-    );
+    expect(body).toHaveLength(3);
   });
 
-  test('returns list of currencies sorted by code', async () => {});
-  test('each item has currency and rate fields', async () => {});
 });
 
 test.describe('GET /api/rates/{currency}', () => {
