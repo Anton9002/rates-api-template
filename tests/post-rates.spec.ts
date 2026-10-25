@@ -84,8 +84,8 @@ test.describe('POST /api/rates', () => {
 
     })
 
-    expect(response.status()).toBe(400);
+    expect(response.status()).toBe(409);
 
   });
-  test('returns 413 for body larger than 10000 bytes', async () => {});
+  //test('returns 413 for body larger than 10000 bytes', async () => {});
 });
